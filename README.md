@@ -3,7 +3,8 @@
 **The Go engine [Pachi](https://github.com/pasky/pachi), refactored and rebuilt
 in pure Python for educational purposes.**
 
-pachi-numba is a line-by-line translation of Pachi's C code to Python. 
+pachi-numba is a line-by-line translation of Pachi's C code to Python 
+(71% C code is used for tests only). 
 
 Features:
 - Python 3 support
