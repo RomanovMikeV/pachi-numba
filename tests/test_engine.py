@@ -75,3 +75,14 @@ def test_games_against_random_moves_equal_c(c, seed):
 
 def test_more_playouts_equal_c(c):
     play_game(c, 7, playouts=1500, opponent_share=0.2, max_moves=40)
+
+
+def test_resign_threshold_option():
+    """C's option resign_threshold: 1 resigns on the first search, 0 never."""
+    eager = PachiPlayer(9, 7.5, seed=3, resign_threshold=1.0)
+    assert eager.genmove(1, 1000) == -2  # every win chance is below 1
+    never = PachiPlayer(9, 7.5, seed=3, resign_threshold=0.0)
+    color = 1
+    for _ in range(12):
+        assert never.genmove(color, 1000) != -2
+        color = 3 - color

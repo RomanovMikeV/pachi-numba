@@ -65,6 +65,9 @@ print("black's margin:", pachi.black_margin())
   a move of the opponent (returns `False` if it is illegal);
   `black_margin()` is black's area minus white's area and komi, with the
   groups Pachi considers dead removed; `stone(point)` is 0, 1 or 2.
+- `PachiPlayer(..., resign_threshold=0.2)`: Pachi resigns when the win
+  chance of its best move is below this (Pachi's option of the same name);
+  0 never resigns, e.g. to record complete games.
 - The first use compiles the engine, which takes about a minute and a
   half; numba caches the result, and later programs start in about a
   second.

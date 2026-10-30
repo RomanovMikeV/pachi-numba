@@ -130,7 +130,7 @@ def uct_search_poll(u, t, b, color):
 
 
 @njit(cache=True, nogil=True, error_model="numpy", _nrt=False)
-def uct_search_result(u, t, b, color, pass_all_alive):
+def uct_search_result(u, t, b, color, pass_all_alive, resign_threshold):
     """The move to play: (coordinate, best node or NONE for pass and resignation)."""
     root = t.ints[tr.ROOT]
     best = uctp_generic_choose(u, t, root, b, color, RESIGN)
@@ -140,7 +140,7 @@ def uct_search_result(u, t, b, color, pass_all_alive):
     # Do not resign if the evaluation of best is unreliable, or with dynkomi.
     extra_komi = t.floats[tr.EXTRA_KOMI]
     komi_by_color = extra_komi if color == S_WHITE else -extra_komi
-    if tr.tree_node_get_value(t, 1, t.u_value[best]) < np.float32(RESIGN_THRESHOLD) \
+    if tr.tree_node_get_value(t, 1, t.u_value[best]) < np.float32(resign_threshold) \
             and not is_pass(t.coord[best]) \
             and (t.u_playouts[best] > GJ_MINGAMES or t.u_playouts[root] > GJ_MINGAMES * 2) \
             and (not t.ints[tr.USE_EXTRA_KOMI] or komi_by_color < 0.5) \
@@ -176,7 +176,7 @@ class UctEngine:
     move) and ``dead_group_list``.
     """
 
-    def __init__(self, b, seed=None):
+    def __init__(self, b, seed=None, resign_threshold=RESIGN_THRESHOLD):
         if pb.real_board_size(b) > 9:
             raise NotImplementedError("dynkomi linear (boards over 9x9) is not translated")
         params = walk.walk_params_default()
@@ -187,6 +187,8 @@ class UctEngine:
         self.u = Uct(params, ucb1amaf.policy_ucb1amaf_init(b), prior.uct_prior_init(b),
                      moggy.playout_moggy_init(None, b),
                      om.ownermap_new(int(pb.board_size2(b))), rng, flags)
+        # C option resign_threshold: resign below this win chance of the best move.
+        self.resign_threshold = float(resign_threshold)
         self.tree = None
         self.initial_extra_komi = np.float32(0)
 
@@ -277,7 +279,8 @@ class UctEngine:
 
         self._grow_for_pass_check(b)
         coord, best = uct_search_result(self.u, self.tree, b, color,
-                                        self.u.flags[PASS_ALL_ALIVE] != 0)
+                                        self.u.flags[PASS_ALL_ALIVE] != 0,
+                                        self.resign_threshold)
         coord, best = int(coord), int(best)
         if best == tr.NONE:
             # Pass or resign.

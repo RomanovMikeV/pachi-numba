@@ -8,4 +8,4 @@ GNU General Public License version 2, like Pachi. Start with
 runs several games at once.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

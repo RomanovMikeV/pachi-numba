@@ -27,6 +27,9 @@ class PachiPlayer:
         Komi for white.
     seed : int, optional
         Seed of the random numbers (C: ``fast_srandom`` of the main thread).
+    resign_threshold : float
+        Pachi resigns when the win chance of its best move is below this
+        (C option ``resign_threshold``; default 0.2, 0 never resigns).
 
     Examples
     --------
@@ -34,11 +37,11 @@ class PachiPlayer:
     >>> point = player.genmove(color=1, playouts=500)
     """
 
-    def __init__(self, size=9, komi=7.5, seed=None):
+    def __init__(self, size=9, komi=7.5, seed=None, resign_threshold=0.2):
         self.board = pb.board_init(size)
         self.board.komi[0] = komi
         pb.board_set_rules(self.board, "chinese")
-        self.engine = UctEngine(self.board)
+        self.engine = UctEngine(self.board, resign_threshold=resign_threshold)
         if seed is not None:
             self.seed(seed)
 
