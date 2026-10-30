@@ -1,0 +1,35 @@
+pachi-numba
+===========
+
+pachi-numba is a translation of the Go engine Pachi from C to Python
+(compiled with numba). It is a work based on Pachi and is distributed
+under the GNU General Public License version 2 (the file LICENSE), like
+Pachi.
+
+Original work
+-------------
+
+Pachi, version 11.99, as included in OpenAI's pachi-py 0.0.21
+(https://github.com/openai/pachi-py), by Petr Baudis, Jean-loup Gailly and
+the other authors listed in the file CREDITS (copied from that version).
+Upstream: https://github.com/pasky/pachi.
+
+Pachi's licence statement (from its README): "Pachi is distributed under
+the GPLv2 licence (see the COPYING file for details and full text of the
+licence); you are welcome to tweak it as you wish (contributing back
+upstream is welcome) and distribute it freely, but only together with the
+source code."
+
+Changes (GPLv2 section 2a)
+--------------------------
+
+October 2026: the C code of Pachi's default "uct" engine and everything it
+uses (board, random numbers, 3x3 patterns, tactics, playout policies,
+tree search, priors, ownermap) was translated line by line to Python
+(pachi_numba/), restructured for numba (arrays instead of pointers and
+structs, explicit stacks instead of recursion, per-engine random state
+instead of thread-local globals), and given a Python interface
+(pachi_numba/player.py, pachi_numba/parallel.py). Every translated file
+says which Pachi file it translates. reference/shim.c is a new C
+interface used only by the tests. The C sources in reference/pachi_src/
+are Pachi's, unmodified (build files and documents left out).

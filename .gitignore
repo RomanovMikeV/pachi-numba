@@ -1,0 +1,36 @@
+# Python bytecode and numba's compiled-code cache (both in __pycache__)
+__pycache__/
+*.py[cod]
+*.nbi
+*.nbc
+
+# The C reference Pachi, built by the tests (reference/__init__.py)
+reference/_build/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.whl
+
+# Tests and tools
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editors, notebooks and operating systems
+.idea/
+.vscode/
+*.swp
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db

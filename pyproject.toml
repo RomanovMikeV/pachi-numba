@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pachi-numba"
+version = "0.1.0"
+description = "The Go engine Pachi, rebuilt in pure Python (compiled with numba) for education"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26", "numba>=0.60"]
+license = "GPL-2.0-only"
+license-files = ["LICENSE", "NOTICE", "CREDITS"]
+keywords = ["go", "baduk", "weiqi", "mcts", "uct", "pachi", "numba", "reinforcement learning"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment :: Board Games",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["pachi_numba*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
